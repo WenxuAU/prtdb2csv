@@ -6,6 +6,16 @@
 ;2. fout: the output folder where the converted csv files from prtdb files will be stored.
 ;3. fconfig: the configuration files for csv outputs, depending on the vehicles used.
 ;---------------------------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------------------------
+; in this version, the updates include :
+; 1. the unreliable file input path is improved by using TRzShellTree list to specify the path. The first version 
+;     tried to set edit text directly which fail constantly by not changing the directory to the text sent. If there is 
+;     a space key input afterwards the method can work. This needs to be explored further.
+; 2. the event log configuration file is now enabled. 
+;-----------------------------------------------------------------------------------------------------
+
+
+
 #include <File.au3>
 #include <GuiListView.au3>
 
