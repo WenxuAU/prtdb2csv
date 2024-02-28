@@ -58,7 +58,6 @@ Next
 ;~ ;$fconfig = "Q:\_Charts\_System_Reporter_Reports\QC_Reports\MMY038 IRRISYS.rep"
 ;~ ;$fout = "D:\oTCI\01_PROD_IN_USE\02_QC_Manned_Vehicles\Files\Input\Raw_CSVs\MMY038" ; output folder
 
-
 Func prtdb2csv(ByRef $sfROAMES, ByRef $prtdb_dir,ByRef  $fconfig,ByRef $logconfig,ByRef $fout, ByRef $vehicle)
 	
 	Local $iI, $fcount, $prtdb_dir_temp
@@ -67,34 +66,23 @@ Func prtdb2csv(ByRef $sfROAMES, ByRef $prtdb_dir,ByRef  $fconfig,ByRef $logconfi
 	;;;;;=============================end of the test==================================
 	; select the prtdb files in the folder for conversion into csv files.
 	$arrayofsubstringInput =  StringSplit($prtdb_dir,"\") ; split the string into different subsections (each folder)
-	If StringInStr($prtdb_dir,"Desktop") Then
-		If StringInStr($prtdb_dir,"C:") Then
-			$prtdb_dir_temp = 'C:\'
-		ElseIf  StringInStr($prtdb_dir,"D:") Then
-;~ 			ConsoleWrite('I am here' & @LF)
-			$prtdb_dir_temp = 'D:\'
-		ElseIf  StringInStr($prtdb_dir,"E:") Then
-			$prtdb_dir_temp = 'E:\'
-		ElseIf  StringInStr($prtdb_dir,"F:") Then
-			$prtdb_dir_temp = 'F:\'
-		ElseIf  StringInStr($prtdb_dir,"G:") Then
-			$prtdb_dir_temp = 'G:\'
-		ElseIf  StringInStr($prtdb_dir,"H:") Then
-			$prtdb_dir_temp = 'H:\'
-		ElseIf StringInStr($prtdb_dir,"I:") Then
-			$prtdb_dir_temp = 'I:\'	
-		EndIf		
+	
+	If StringInStr($prtdb_dir,"Desktop") Then		
+		$pattern = '[A-Za-z]:'
+		$fDrive = StringRegExp($prtdb_dir, $pattern, $STR_REGEXPARRAYMATCH)
+		$prtdb_dir_temp = $fDrive[0] &'\'	
 		For $iJ = 4 to $arrayofsubstringInput[0]-1:
 ;~ 			ConsoleWrite( $arrayofsubstringInput[$iJ] & @LF)
 				$prtdb_dir_temp = $prtdb_dir_temp & $arrayofsubstringInput[$iJ] &'\'
 			Next
 		$prtdb_dir_temp = $prtdb_dir_temp & $arrayofsubstringInput[$arrayofsubstringInput[0]]
-	EndIf
+	EndIf	
+	;ConsoleWrite($prtdb_dir_temp & @LF)	
 
 	$aFileList = _FileListToArray($prtdb_dir_temp,"*.prtdb",1,True )
 	; Display the results returned by _FileListToArray.
 	;_ArrayDisplay($aFileList, "$aFileList") ; this will prompt a window pop up, commented here
-	If  @error==0 Then
+	If  @error==0 Then ; there is no erro
 		if $aFileList[0] Then
 			$fcount = $aFileList[0]  ; count the number of prtdbf files in the selected folder
 			ConsoleWrite("The number of the prtdb files in the folder is "&$fcount&"."&@LF)
@@ -111,11 +99,12 @@ Func prtdb2csv(ByRef $sfROAMES, ByRef $prtdb_dir,ByRef  $fconfig,ByRef $logconfi
 			; the code below does not work properly
 			WinMenuSelectItem("[CLASS:TReportMainForm]","","&File","&Open Files...") ; configuration file
 			
-;~ 			ConsoleWrite($arrayofsubstringInput[0] &@LF)
-;~ 			For $iI = 1 to $arrayofsubstringInput[0] ; print the splitted string elements
-;~ 			 	;UBound($arrayofsubstring) ; another method to get the array size
-;~ 			 	ConsoleWrite($arrayofsubstringInput[$iI]&"."&@LF)
-;~ 			Next 
+;~ 			
+			;ConsoleWrite($arrayofsubstringInput[0] &@LF)
+			;For $iI = 1 to $arrayofsubstringInput[0] ; print the splitted string elements
+			 	;;UBound($arrayofsubstring) ; another method to get the array size
+			 	;ConsoleWrite($arrayofsubstringInput[$iI]&"."&@LF)
+			;Next 
 
 			$hwnd_Input = WinGetHandle("[CLASS:TFileListForm]")
 			$TreeInput = ControlGetHandle($hwnd_Input,"","[CLASS:TRzShellTree; INSTANCE:1]")
